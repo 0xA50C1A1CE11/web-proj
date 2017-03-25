@@ -1,0 +1,15 @@
+.
+├── database  #database storage
+│   └── yafr.db
+├── files  #files storage
+├── requirements.txt  #requirements
+├── setup.py
+├── utils.py  #top level script
+└── yafr  #flask app itself
+    ├── __init__.py
+    ├── main.py
+    ├── static
+    │   └── favicon.ico
+    └── templates
+
+5 directories, 8 files
