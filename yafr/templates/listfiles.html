@@ -1,0 +1,6 @@
+  {% for item in seq %}
+    {{ item[0] }}
+    <a href=" {{url_for('download',filename=item[0])}} ">download</a>
+    <a href=" {{url_for('delete',filename=item[0])}}"> delete </a>
+    <p>
+  {% endfor %}
