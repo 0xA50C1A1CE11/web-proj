@@ -1,0 +1,12 @@
+week 1:
+  created primitive skeleton app skeleton:
+    it can register user
+    create a personel folder for each user
+    upload users files
+    delete them
+    dowload them
+    handle login and sessions
+    
+week 2 (in progress):
+  db remade
+  hired one awesome frontend developer
