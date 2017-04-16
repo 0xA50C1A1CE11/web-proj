@@ -1,7 +1,8 @@
 <form method="POST" action="{{ url_for('sign_up') }}">
+Login and pass shouldn't be less then 5 characters or digits <p>
 Login <p>
-<input type="text" name="username"> </input> <p>
+<input type="text" name="username" pattern="[A-Za-z0-9]{5,20}"> </input> <p>
 Password <p>
-<input type="password" name="password"> </input> <p>
+<input type="password" name="password" pattern="[A-Za-z0-9]{5,50}"> </input> <p>
 <input type="submit" value="Submit"> </input>
 </form>

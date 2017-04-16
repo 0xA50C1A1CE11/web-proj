@@ -1,0 +1,7 @@
+{% if extension in ('jpg','jpeg','png') %}
+  <img src="{{filepath}}">
+{% elif extension in ('txt') %}
+  <iframe src="{{filepath}}"></iframe>
+{% else %}
+  can't preview
+{% endif %}

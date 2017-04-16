@@ -1,15 +1,28 @@
 .
-├── database  #database storage
+├── database
 │   └── yafr.db
-├── files  #files storage
-├── requirements.txt  #requirements
+├── files
+│   ├── 123
+│   └── asd
+├── nginx.conf
+├── requirements.txt
 ├── setup.py
-├── utils.py  #top level script
-└── yafr  #flask app itself
+├── utils.py
+└── yafr
     ├── __init__.py
     ├── main.py
     ├── static
     │   └── favicon.ico
-    └── templates
+    ├── templates
+    │   ├── homepage.html
+    │   ├── listfiles.html
+    │   ├── login.html
+    │   ├── preview.html
+    │   ├── profile.html
+    │   ├── searchfiles.html
+    │   ├── showfiles.html
+    │   ├── sign_up.html
+    │   └── upload.html
+    └── yafr.cfg
 
-5 directories, 8 files
+7 directories, 18 files

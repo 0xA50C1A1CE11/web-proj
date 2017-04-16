@@ -1,0 +1,9 @@
+<form method="POST" action="{{ url_for('browse') }}">
+  Input your qyery <p>
+  <input type="text" name="filename"> Filename</input> <p>
+  <input type="text" name="owner"> File owner</input> <p>
+  <input type="text" name="type"> File type</input> <p>
+  <input type="text" name="file_descr"> File description</input> <p>
+  <input type="submit" text="Search"> </input>
+</form>
+<a href=" {{url_for('index')}} ">back</a>

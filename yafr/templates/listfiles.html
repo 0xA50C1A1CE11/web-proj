@@ -1,6 +1,9 @@
   {% for item in seq %}
     {{ item[0] }}
     <a href=" {{url_for('download',filename=item[0])}} ">download</a>
-    <a href=" {{url_for('delete',filename=item[0])}}"> delete </a>
+    <a href=" {{url_for('delete',filename=item[0])}}"
+       onclick="return confirm('are u sure?')"> delete </a>
+    <a href=" {{url_for('preview',filename=item[0])}}"> preview </a>
     <p>
   {% endfor %}
+<a href=" {{url_for('profile')}} ">back</a>

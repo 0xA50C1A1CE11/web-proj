@@ -1,0 +1,7 @@
+{% for item in seq %}
+  {{ item[0] }} owned by user {{ item[1] }}
+  <a href=" {{url_for('download_from',filename=item[0],username=item[2])}} ">download</a>
+  <a href=" {{url_for('preview_from',filename=item[0],username=item[2])}}"> preview </a>
+  <p>
+{% endfor %}
+<a href=" {{url_for('browse')}} ">back</a>

@@ -1,6 +1,9 @@
-<form id="data" method="POST" action="{{ url_for('upload') }}" enctype=multipart/form-data>
+<form method="POST" action="{{ url_for('upload') }}" enctype=multipart/form-data>
 File <p>
 <input type="file" name="file"> </input> <p>
+<input type="checkbox" name="privacy"> is your file private </input> <p>
+file discription <p>
+<input type="text" name="description"></input> <p>
 <input type="submit" value="Submit"> </input>
 </form>
-
+<a href=" {{url_for('profile')}} ">back</a>

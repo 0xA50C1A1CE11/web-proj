@@ -3,8 +3,8 @@ from setuptools import setup
 setup(
     name='yafr-utils',
     version='0.1',
-    py_modules=['utils',
-                '/yafr/main.py'],
+    py_modules=['utils'],
+    packages=['yafr'],
     install_requires=[
         'Click',
     ],

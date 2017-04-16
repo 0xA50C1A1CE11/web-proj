@@ -1,6 +1,6 @@
 {% if user %}
 <a href="{{url_for('profile')}}"><h4> {{user}}'s repo</h4></a>
-<a href=""><h4> browse repos/files </h4></a>
+<a href="{{ url_for('browse') }}"><h4> browse repos/files </h4></a>
 <a href="{{ url_for('log_out') }}"><h4> Sign out </h4></a>
 {% else %}
 <a href="{{ url_for('login') }}"><h4> Sign in </h4></a>
