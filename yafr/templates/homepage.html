@@ -1,3 +1,4 @@
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 {% if user %}
 <a href="{{url_for('profile')}}"><h4> {{user}}'s repo</h4></a>
 <a href="{{ url_for('browse') }}"><h4> browse repos/files </h4></a>

@@ -1,3 +1,4 @@
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   {% for item in seq %}
     {{ item[0] }}
     <a href=" {{url_for('download',filename=item[0])}} ">download</a>

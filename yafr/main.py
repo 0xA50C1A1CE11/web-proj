@@ -1,6 +1,7 @@
 #imports
 from flask import Flask,render_template,session,\
-                  request,redirect,url_for,send_from_directory
+                  request,redirect,url_for,send_from_directory,\
+                  make_response
 from werkzeug.utils import secure_filename
 import sqlite3,hashlib
 import os
@@ -10,7 +11,6 @@ app = Flask(__name__)
 app.config.from_envvar('YAFR_SETTINGS')
 db = sqlite3.connect(os.path.join(app.config['ROOTDIR'],'database/yafr.db'),
                      check_same_thread=False)
-
 
 #logic
 @app.route('/')
@@ -89,9 +89,12 @@ def download(filename):
   userdir = cur.execute("SELECT homedir FROM USERS WHERE username=?",(session['username'],))
   userdir = userdir.fetchone()[0]
   print("user {} uploaded file {}".format(session['username'],filename))
-  return send_from_directory(userdir,
+  response = make_response()
+  response.headers['X-Accel-Redirect'] = '/download/{}/{}'.format(session['username'],filename)
+  return response
+  '''return send_from_directory(userdir,
                              filename=filename,
-                             as_attachment=True)
+                             as_attachment=True)'''
 
 @app.route('/download_from', methods=['GET'])
 def download_from():

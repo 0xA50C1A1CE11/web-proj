@@ -27,6 +27,17 @@ def dbref():
            privacy integer not null
            description text
            """)
+@cli.command('logo')
+def logo():
+  """
+  displays fancy logo
+  """
+  print('\n__   __ _    _____ ____\n\
+\ \ / // \  |  ___|  _ \ \n\
+ \ V // _ \ | |_  | |_) |\n\
+  | |/ ___ \|  _| |  _ < \n\
+  |_/_/   \_\_|   |_| \_\\\n\
+Yet Another File Repository\n')
 @cli.command('db-seek')
 @click.option('--n',default=-1,help='number of matches')
 @click.option('--db',type=click.Choice(['users', 'files']),
@@ -92,10 +103,11 @@ def run(debug,vis,port):
   """
   runs server
   """
-  from yafr import main
+  '''from yafr import main
   main.app.run(debug = debug,
                host = vis and "0.0.0.0" or "127.0.0.1",
-               port = port)
+               port = port)'''
+  os.system('uwsgi --socket 127.0.0.1:3031 --wsgi-file wsgi.py --callable app --processes 4 --threads 2')
 
 @cli.command()
 def initdb():
@@ -140,4 +152,7 @@ def dropdb():
   curs.execute("DROP TABLE IF EXISTS users")
   db.commit()
   db.close()
+  import os,glob,shutil
+  dirs = glob.glob('yafr/files/*')
+  for d in dirs: shutil.rmtree(d)
   print("database drop sucessfully")

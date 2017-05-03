@@ -1,0 +1,2 @@
+touch /etc/nginx/nginx.conf;rm /etc/nginx/nginx.conf; cp nginx.conf /etc/nginx/nginx.conf;
+touch /etc/nginx/wsgi_params;rm /etc/nginx/wsgi_params; cp wsgi_params /etc/nginx/wsgi_params;
