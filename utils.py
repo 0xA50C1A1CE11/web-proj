@@ -103,11 +103,10 @@ def run(debug,vis,port):
   """
   runs server
   """
-  '''from yafr import main
+  from yafr import main
   main.app.run(debug = debug,
                host = vis and "0.0.0.0" or "127.0.0.1",
-               port = port)'''
-  os.system('uwsgi --socket 127.0.0.1:3031 --wsgi-file wsgi.py --callable app --processes 4 --threads 2')
+               port = port)
 
 @cli.command()
 def initdb():

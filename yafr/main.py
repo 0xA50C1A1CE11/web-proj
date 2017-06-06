@@ -1,7 +1,7 @@
 #imports
 from flask import Flask,render_template,session,\
                   request,redirect,url_for,send_from_directory,\
-                  make_response
+                  send_file,make_response
 from werkzeug.utils import secure_filename
 import sqlite3,hashlib
 import os
@@ -82,19 +82,19 @@ def listfiles():
   return render_template("listfiles.html",
                           seq = cur.fetchall())
 
-@app.route('/download/<path:filename>', methods=['GET', 'POST'])
+@app.route('/download/<path:filename>', methods=['GET'])
 def download(filename):
   if not 'username' in session:return redirect(url_for('index'))
   cur = db.cursor()
   userdir = cur.execute("SELECT homedir FROM USERS WHERE username=?",(session['username'],))
   userdir = userdir.fetchone()[0]
-  print("user {} uploaded file {}".format(session['username'],filename))
-  response = make_response()
-  response.headers['X-Accel-Redirect'] = '/download/{}/{}'.format(session['username'],filename)
+  print("user {} downloaded file {}".format(session['username'],filename))
+  redirect_path = os.path.join(session['username'],filename)
+  redirect_path = "/download_api/" + redirect_path
+  print(redirect_path)
+  response = make_response("")
+  response.headers["X-Accel-Redirect"] = redirect_path
   return response
-  '''return send_from_directory(userdir,
-                             filename=filename,
-                             as_attachment=True)'''
 
 @app.route('/download_from', methods=['GET'])
 def download_from():

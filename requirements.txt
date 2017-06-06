@@ -5,8 +5,9 @@ itsdangerous==0.24
 Jinja2==2.9.5
 MarkupSafe==1.0
 packaging==16.8
+Paste==2.0.3
 pyparsing==2.2.0
 six==1.10.0
 uWSGI==2.0.15
 Werkzeug==0.12.1
--e git+http://github.com/0xA50C1A1CE11/web-proj@cb5bed7f4891830c1c2aae936d683d0fe3aa3fd1#egg=yafr_utils
+-e git+http://github.com/0xA50C1A1CE11/web-proj@86b59821b18d83d568de15b968991655f257ad05#egg=yafr_utils
