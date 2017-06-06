@@ -7,6 +7,4 @@ MarkupSafe==1.0
 packaging==16.8
 pyparsing==2.2.0
 six==1.10.0
-uWSGI==2.0.15
 Werkzeug==0.12.1
--e git+http://github.com/0xA50C1A1CE11/web-proj@cb5bed7f4891830c1c2aae936d683d0fe3aa3fd1#egg=yafr_utils

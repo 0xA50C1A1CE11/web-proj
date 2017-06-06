@@ -90,7 +90,8 @@ def download(filename):
   userdir = userdir.fetchone()[0]
   print("user {} uploaded file {}".format(session['username'],filename))
   response = make_response()
-  response.headers['X-Accel-Redirect'] = '/download/{}/{}'.format(session['username'],filename)
+  response.headers['X-Accel-Redirect'] = '/download_api/{}/{}'.format(session['username'],filename)
+  response.headers['Content-Disposition']="attachment"
   return response
   '''return send_from_directory(userdir,
                              filename=filename,
