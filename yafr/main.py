@@ -1,9 +1,8 @@
 #imports
 from flask import Flask,render_template,session,\
                   request,redirect,url_for,send_from_directory,\
-                  send_file,make_response
-from flask.ext.login import LoginManager, UserMixin, \
-                  login_required, login_user, logout_user 
+                  send_file,make_response,flash
+import flask_login
 from werkzeug.utils import secure_filename
 import sqlite3,hashlib
 import os
@@ -13,18 +12,24 @@ app = Flask(__name__)
 app.config.from_envvar('YAFR_SETTINGS')
 db = sqlite3.connect(os.path.join(app.config['ROOTDIR'],'database/yafr.db'),
                      check_same_thread=False)
-login_manager = LoginManager()
+login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+class User(flask_login.UserMixin):pass
 
 #logic
+def getusername():
+  if hasattr(flask_login.current_user,'id'):
+    return flask_login.current_user.id
+  return False
+
 @app.route('/')
 def index():
-  return render_template("homepage.html",user=session.get('username',False))
+  return render_template("homepage.html",user = getusername())
 
-@app.route('/profile')  
+@app.route('/profile')
+@flask_login.login_required
 def profile():
-  if not 'username' in session:return redirect(url_for('index'))
-  return render_template("profile.html",user=session.get('username',False))
+  return render_template("profile.html",user = flask_login.current_user.id)
 
 def allowed_file(filename):
   return '.' in filename and \
@@ -32,8 +37,8 @@ def allowed_file(filename):
          set(['txt', 'pdf', 'png', 'jpg', 'jpeg','zip','mp3','mp4','gif'])
 
 @app.route('/upload',methods=['POST','GET'])
+@flask_login.login_required
 def upload():
-  if not 'username' in session:return redirect(url_for('index'))
   if request.method == 'POST':
     if 'file' not in request.files:
       return "file missed"
@@ -45,7 +50,7 @@ def upload():
       privacy = request.form.get('privacy',1)=='on' and 1 or 0
       description = request.form.get('description','')
       filename = secure_filename(file.filename)
-      sdir = cur.execute("SELECT homedir FROM users WHERE username=?",(session['username'],))
+      sdir = cur.execute("SELECT homedir FROM users WHERE username=?",(getusername(),))
       sdir = sdir.fetchone()[0]
       formatt = filename.rsplit('.', 1)[1]
       if os.path.isfile(os.path.join(sdir,filename)):
@@ -56,22 +61,12 @@ def upload():
                                       privacy,\
                                       description) \
                    VALUES(?,?,?,?,?)",(filename,
-                                       session['username'],
+                                       getusername(),
                                        formatt, #actually format
                                        privacy,
                                        description,))
       db.commit()
       file.save(os.path.join(sdir, filename))
-      print("user {} uploaded file {}\n\
-             to: {} \n\
-             type: {}\n\
-             privacy: {} \n\
-             description: {}".format(session['username'],
-                                    filename,
-                                    sdir,
-                                    formatt,
-                                    privacy,
-                                    description))
       return redirect(url_for('listfiles'))
     else:
       return "something went wrong"
@@ -79,28 +74,27 @@ def upload():
     return render_template("upload.html")
 
 @app.route('/listfiles')
+@flask_login.login_required
 def listfiles():
-  if not 'username' in session:return redirect(url_for('index'))
   cur = db.cursor()
-  cur.execute("SELECT filename FROM files WHERE owner=?",(session['username'],))
+  cur.execute("SELECT filename FROM files WHERE owner=?",(getusername(),))
   return render_template("listfiles.html",
                           seq = cur.fetchall())
 
 @app.route('/download/<path:filename>', methods=['GET'])
+@flask_login.login_required
 def download(filename):
-  if not 'username' in session:return redirect(url_for('index'))
   cur = db.cursor()
-  userdir = cur.execute("SELECT homedir FROM USERS WHERE username=?",(session['username'],))
+  userdir = cur.execute("SELECT homedir FROM USERS WHERE username=?",(getusername(),))
   userdir = userdir.fetchone()[0]
-  print("user {} downloaded file {}".format(session['username'],filename))
-  redirect_path = os.path.join(session['username'],filename)
+  redirect_path = os.path.join(getusername(),filename)
   redirect_path = "/download_api/" + redirect_path
-  print(redirect_path)
   response = make_response("")
   response.headers["X-Accel-Redirect"] = redirect_path
   return response
 
 @app.route('/download_from', methods=['GET'])
+@flask_login.login_required
 def download_from():
   filename = request.args.get("filename")
   username = request.args.get("username")
@@ -112,10 +106,10 @@ def download_from():
                              as_attachment=True)
 
 @app.route('/delete/<path:filename>', methods=['GET', 'POST'])
+@flask_login.login_required
 def delete(filename):
-  if not 'username' in session:return redirect(url_for('index'))
   cur = db.cursor()
-  userdir = cur.execute("SELECT homedir FROM USERS WHERE username=?",(session['username'],))
+  userdir = cur.execute("SELECT homedir FROM USERS WHERE username=?",(getusername(),))
   userdir = userdir.fetchone()[0]
   filepath = os.path.join(userdir,filename)
   if os.path.isfile(filepath):
@@ -123,12 +117,12 @@ def delete(filename):
     cur = db.cursor()
     cur.execute('DELETE FROM files WHERE filename=?',(filename,))
     db.commit()
-    print("user {} delted file {}".format(session['username'],filename))
     return redirect(url_for('listfiles'))
   else:
     return "file not exists"
 
 @app.route('/browse',methods=['GET','POST'])
+@flask_login.login_required
 def browse():
   if request.method == 'POST':
     filename = request.form['filename']
@@ -139,10 +133,6 @@ def browse():
     if owner=='': owner='%'
     if type=='': type='%'
     if file_descr=='': file_descr='%'
-    print('filename ',filename,
-          '\nowner ',owner,
-          '\ntype ',type,
-          '\ndescr',file_descr)
     cur = db.cursor()
     query = cur.execute("SELECT filename,description,owner FROM files WHERE\
                          filename LIKE ? AND \
@@ -157,16 +147,19 @@ def browse():
     return render_template('searchfiles.html')
 
 @app.route('/preview/<string:filename>')
+@flask_login.login_required
 def preview(filename):
   cur = db.cursor()
-  user = session['username']
+  user = getusername()
   userdir = cur.execute("SELECT homedir FROM users WHERE username=?",(user,))
   userdir = userdir.fetchone()[0]
   filepath = os.path.join(userdir,filename)
   extension = filename.rsplit('.',1)[1]
+  print(filepath)
   return render_template('preview.html',extension=extension,filepath=filepath)
 
 @app.route('/preview_from',methods=['GET'])
+@flask_login.login_required
 def preview_from():
   cur = db.cursor()
   user = request.args.get('username')
@@ -174,13 +167,13 @@ def preview_from():
   userdir = cur.execute("SELECT homedir FROM users WHERE username=?",(user,))
   userdir = userdir.fetchone()[0]
   filepath = os.path.join(userdir,filename)
-  print(filename)
   extension = filename.rsplit('.',1)[1]
   return render_template('preview.html',
                           extension=extension,
                           filepath=filepath)
 
 @app.route('/sign_up',methods=['GET', 'POST'])
+@flask_login.login_required
 def sign_up():
   if request.method == 'POST':
     username,passw = request.form['username'],request.form['password']
@@ -195,7 +188,6 @@ def sign_up():
       cur.execute("INSERT INTO users (username,passh,homedir) VALUES(?,?,?)",\
                                                   (username,passwh,homedir,))
       db.commit()
-    session['username'] = username
     if not os.path.exists(homedir):
       os.makedirs(homedir)
     return redirect(url_for('index'))
@@ -212,17 +204,54 @@ def login():
                 (username,passwh))
     exists=cur.fetchone()[0]
     if exists:
-      user = User(username)
-      login_user(user)
-      #session['username'] = username
-      return redirect(url_for('index'))
+      cur.execute("SELECT uid,username,passh FROM users WHERE username = ? AND passh=?",
+                (username,passwh))
+      uid,uname,passwhn = cur.fetchone()
+      if passwh == passwhn:
+        user = User()
+        user.id = username
+        flask_login.login_user(user)
+        return redirect(url_for('index'))
+      else:
+        return "wrong pass"
     else:
-      return "wrong username/pass"
+      return "user not exists"
   else:
     return render_template("login.html")
 
 @app.route('/log_out')
+@flask_login.login_required
 def log_out():
-  if not 'username' in session:return redirect(url_for('index'))
-  del session['username']
+  flask_login.logout_user()
   return redirect(url_for('index'))
+
+@login_manager.user_loader
+def user_loader(username):
+  cur = db.cursor()
+  cur.execute("SELECT count(*) FROM users WHERE username = ?", (username,))
+  exists=cur.fetchone()[0]
+  if not exists:
+    return
+  user = User()
+  user.id = username
+  return user
+
+@login_manager.request_loader
+def request_loader(request):
+  username = request.form.get('username')
+  cur = db.cursor()
+  cur.execute("SELECT count(*) FROM users WHERE username = ?", (username,))
+  exists=cur.fetchone()[0]
+  if not exists:
+    return
+  cur.execute("SELECT username,passh FROM users WHERE username = ?", (username,))
+  uid,passwh1 = cur.fetchone()[0]
+  user = User()
+  user.id = username
+  passwh2 =  hashlib.sha224(request.form['password'].encode('utf-8')).hexdigest()
+  user.is_authenticated = passwh1 == passwh2
+  return user
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+  return 'Unauthorized'
