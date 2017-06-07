@@ -1,3 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web-proj</title>
+	<script
+  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+  crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400&amp;subset=cyrillic,cyrillic-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script type="text/javascript" src = "lib/semantic.min.js"></script>
+    <script type="text/javascript" src = "lib/components/list.min.js"></script>
+    <script type="text/javascript" src = "lib/sidebar.js"></script>
+    
+<style type="text/css">
+
+	.ui.tag.label {
+		display: block;
+	}
+	.ui.segment {
+		background: rgba(255,255,255,0.2);
+		border-radius: 20px;
+		
+	}
+	.ui.segment input {
+		border-radius: 1px;
+    font-size: 1.2em;
+	}
+	.ui.right.labeled.left.icon.input {
+		width: 50%;
+		height: 40px;
+	}
+    html {
+    	min-width: 640px !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 100 !important;
+        width: 100% !important;
+        background-size: 100%;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#10aa83+0,11dfc7+35,89c8ff+68,248df6+100 */
+background: #10aa83; /* Old browsers */
+background: -moz-linear-gradient(-45deg, #10aa83 0%, #11dfc7 35%, #89c8ff 68%, #248df6 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, #10aa83 0%,#11dfc7 35%,#89c8ff 68%,#248df6 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, #10aa83 0%,#11dfc7 35%,#89c8ff 68%,#248df6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#10aa83', endColorstr='#248df6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+background-repeat: no-repeat;
+background-size: cover;
+        z-index: 1 !important;
+        
+    }
+    header {
+    	padding-left: 40px;
+    }
+    body {
+    	
+    	background: none !important;
+    }
+    .ui.grid {
+    	margin-top: 13%;
+    }
+    .title {
+  		color: white;
+        
+        font-size: 3em;
+        font-weight: 100 !important;
+    }
+    .btn.btn-lg.btn-primary {
+        width: 30%;
+        background: none;
+        border: 1px solid white;
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 100 !important;
+        font-size: 200%;
+        border-radius: 0px 0px 200px 0px;
+    }
+    .btn.btn-lg.btn-primary:hover {
+        
+        background: none;
+        border: 1px solid red;
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 100 !important;
+        color: red;
+    }
+    #itembut {
+    	width: 100px;
+    }
+    .file {
+    	color: white!important;
+    	font-size: 1.3em;
+    	font-weight: 100 !important;
+    }
+</style>
+</head>
+   <header>
+   <br>
+   <a class="ui inverted red button" href=" {{url_for('index')}} ">back</a>
+    </header>
+
+
+    <body>
+       
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<div class="ui container">
+<form method="POST" action="{{ url_for('browse') }}">
+<div class="title">
+	<center>{{user}}'s files</center>
+</div>
+<hr>
+<div class="container">
+	
+{% for item in seq %}
+<div class="col-md-4">
+	<center>
+	<h3 class="file">{{ item[0] }}</h3>
+								<div class="ui buttons">
+  <button class="ui positive button" href=" {{url_for('download',filename=item[0])}} "">Download</button>
+  <div class="or"></div>
+  <button class="ui negative button" href=" {{url_for('delete',filename=item[0])}} " onclick="return confirm('Are you sure?')">Delete</button>
+  <div class="or"></div>
+  <button class="ui blue button" href=" {{url_for('preview',filename=item[0])}} ">Preview</button>
+</div>
+	</center>
+    <!--<a class="ui green button" id="itembut" href=" {{url_for('download',filename=item[0])}} ">Download</a>
+    <br><br>
+    <a class="ui red button" id="itembut" href=" {{url_for('delete',filename=item[0])}}"
+       onclick="return confirm('are u sure?')"> Delete </a> <br><br>
+    <a  class="ui blue button" id="itembut" href=" {{url_for('preview',filename=item[0])}}"> Preview </a>
+    <p>-->
+</div>
+
+    
+  {% endfor %}
+
+</div> <br>
+
+
+  
+  
+</form>
+</div>
+   
+    </body>
+
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   {% for item in seq %}
     {{ item[0] }}
@@ -8,3 +185,4 @@
     <p>
   {% endfor %}
 <a href=" {{url_for('profile')}} ">back</a>
+-->
