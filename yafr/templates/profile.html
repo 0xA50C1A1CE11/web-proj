@@ -1,4 +1,136 @@
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Web-proj</title>
+	<script
+  src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+  integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+  crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,400&amp;subset=cyrillic,cyrillic-ext" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script type="text/javascript" src = "lib/semantic.min.js"></script>
+    <script type="text/javascript" src = "lib/components/list.min.js"></script>
+    <script type="text/javascript" src = "lib/sidebar.js"></script>
+    
+<style type="text/css">
+    html {
+    	/*min-width: 640px !important;*/
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 100 !important;
+        width: 100% !important;
+        background-size: 100%;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#10aa83+0,11dfc7+35,89c8ff+68,248df6+100 */
+background: #10aa83; /* Old browsers */
+background: -moz-linear-gradient(-45deg, #10aa83 0%, #11dfc7 35%, #89c8ff 68%, #248df6 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(-45deg, #10aa83 0%,#11dfc7 35%,#89c8ff 68%,#248df6 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(135deg, #10aa83 0%,#11dfc7 35%,#89c8ff 68%,#248df6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#10aa83', endColorstr='#248df6',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+background-repeat: no-repeat;
+background-size: cover;
+        z-index: 1 !important;
+    }
+    body {
+    	background: none !important;
+    	padding: 0% 5%;
+    }
+     header {
+    	padding-left: 40px;
+    }
+    .profile {
+    	margin-top: 14%;
+    	background: rgba(50,50,50,0.1);
+    }
+    
+    .ui.centered.card {
+    	margin: auto;
+    }
+    .list a.ui.inverted.button {
+    	color: white !important;
+    }
+    .list a.ui.inverted.button:hover {
+    	color: #10aa83 !important;
+    }
+    .content {
+    	font-weight: 100 !important;
+    	font-family: 'Roboto', sans-serif !important;
+    	font-size: 2em;
+    	padding: 20px 0px;
+    	color: white !important;
+    }
+</style>
+</head>
+   <header>
+   <br>
+   <a class="ui inverted red button" href=" {{url_for('index')}} ">back</a>
+    </header>
+    <body>
+      
+    		<div class="profile">
+<center>
+    			<div class="ui stackable two column divided grid container">
+    				<div class="row">
+    					<div class="eight wide column">
+
+    						<div class="ui centered card">
+  <div class="image">
+    <img src="lib/themes/default/assets/images/matthew.png">
+  </div>
+  <div class="content">
+    <a class="header">{{ user }}</a>
+  </div>
+</div>
+    					</div>
+    					<div class="column">
+<div class="ui middle aligned divided list">
+  <div class="item">
+    <div class="right floated content">
+      <a class="ui inverted button" href="{{ url_for('upload')}}">GO</a>
+    </div>
+    
+    <div class="content">
+      Upload file
+    </div>
+  </div>
+  <div class="item">
+    <div class="right floated content">
+      <a class="ui inverted button" href="{{ url_for('listfiles') }}">GO</a>
+    </div>
+    
+    <div class="content">
+      {{user}}'s files
+    </div>
+  </div>
+  <div class="item">
+    <div class="right floated content">
+      <a class="ui inverted button" href="{{ url_for('index')}}"> GO</a>
+    </div>
+    
+    <div class="content">
+      Home
+    </div>
+  </div>
+</div>
+    					</div>
+    				</div>
+    			</div>
+    			</center>
+    		</div>
+   
+    </body>
+
+
+
+</html>
+
+
+<!--
+
+ <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <h1>{{ user }}'s profile </h1>
 <p>
 <a href="{{ url_for('upload')}}">Upload file</a>
@@ -6,3 +138,5 @@
 <a href="{{ url_for('listfiles') }}">{{user}}'s files</a>
 <p>
 <a href="{{ url_for('index')}}"> Home </a>
+
+-->
