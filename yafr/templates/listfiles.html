@@ -120,8 +120,7 @@ background-size: cover;
   <button class="ui positive button" href=" {{url_for('download',filename=item[0])}} "">Download</button>
   <div class="or"></div>
   <button class="ui negative button" href=" {{url_for('delete',filename=item[0])}} " onclick="return confirm('Are you sure?')">Delete</button>
-  <div class="or"></div>
-  <button class="ui blue button" href=" {{url_for('preview',filename=item[0])}} ">Preview</button>
+  
 </div>
 	</center>
     <!--<a class="ui green button" id="itembut" href=" {{url_for('download',filename=item[0])}} ">Download</a>
