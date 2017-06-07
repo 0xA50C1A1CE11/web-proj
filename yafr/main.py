@@ -2,6 +2,8 @@
 from flask import Flask,render_template,session,\
                   request,redirect,url_for,send_from_directory,\
                   send_file,make_response
+from flask.ext.login import LoginManager, UserMixin, \
+                  login_required, login_user, logout_user 
 from werkzeug.utils import secure_filename
 import sqlite3,hashlib
 import os
@@ -11,6 +13,8 @@ app = Flask(__name__)
 app.config.from_envvar('YAFR_SETTINGS')
 db = sqlite3.connect(os.path.join(app.config['ROOTDIR'],'database/yafr.db'),
                      check_same_thread=False)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 #logic
 @app.route('/')
@@ -208,7 +212,9 @@ def login():
                 (username,passwh))
     exists=cur.fetchone()[0]
     if exists:
-      session['username'] = username
+      user = User(username)
+      login_user(user)
+      #session['username'] = username
       return redirect(url_for('index'))
     else:
       return "wrong username/pass"
